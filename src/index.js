@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const readTalkersInfo = require('./Utils/fsUtils');
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,5 +17,9 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-const iniciando = 'Bora';
-console.log(iniciando);
+app.get('/talker', async (req, res) => {
+  const talkers = await readTalkersInfo();
+
+  if (talkers.length === 0) return res.status(200).json([]);
+  return res.status(200).json(talkers);
+});
