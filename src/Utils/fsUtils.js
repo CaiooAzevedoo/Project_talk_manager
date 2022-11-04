@@ -11,4 +11,8 @@ async function readTalkersInfo() {
   }
 }
 
-module.exports = readTalkersInfo;
+const regex = /[A-Za-z](_?([a-zA-Z]|[0-9]))*/;
+const randomToken = () => regex;
+
+module.exports = { readTalkersInfo,
+randomToken };
