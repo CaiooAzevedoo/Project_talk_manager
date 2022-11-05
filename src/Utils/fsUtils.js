@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
 
 async function readTalkersInfo() {
   try {
@@ -11,8 +12,10 @@ async function readTalkersInfo() {
   }
 }
 
-const regex = /[A-Za-z](_?([a-zA-Z]|[0-9]))*/;
-const randomToken = () => regex;
+function randomToken() {
+    return crypto.randomBytes(8).toString('hex');
+  }
 
-module.exports = { readTalkersInfo,
+module.exports = { 
+readTalkersInfo,
 randomToken };
