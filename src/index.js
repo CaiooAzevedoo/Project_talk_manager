@@ -1,15 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkersInfo, randomToken } = require('./Utils/fsUtils');
-const { validateLogin } = require('./Utils/middleware/validateLogin');
+const { readTalkersInfo, randomToken, writeTalkersInfo } = require('./Utils/fsUtils');
+const { validateLogin, validateTalker } = require('./Utils/middleware/validators');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
-// const BAD_REQUEST = 400;
+const CREATED = 201;
 const NOT_FOUND = 404;
-// const INTERNAL_SERVER_ERROR = 500;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -43,4 +42,22 @@ app.post('/login', validateLogin, (_req, res) => {
   const token = randomToken();
 
   return res.status(HTTP_OK_STATUS).json({ token });
+});
+
+app.post('/talker', validateTalker, async (req, res) => {
+  const { name, age, talk, watchedAt } = req.body;
+  const talkers = await readTalkersInfo();
+  const upId = talkers.sort((a, b) => b.id - a.id)[0].id;
+
+  const talker = {
+    id: upId + 1,
+    name,
+    age,
+    talk,
+    watchedAt,
+  };
+
+  writeTalkersInfo([...talker, talker]);
+  
+  return res.status(CREATED).json(talker);
 });

@@ -16,25 +16,20 @@ function randomToken() {
     return crypto.randomBytes(8).toString('hex');
 }
 
-// function validateEmail(email) {
-//     if (!email) { 
-//         return 'O campo "email" é obrigatório'; 
-// }
-//     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) { 
-//         // https://regexr.com/3e48o //
-//         return 'O "email" deve ter o formato "email@email.com"'; 
-// }
-// return null;
-// }
-  
-// function validatePassword(password) {
-//     if (!password) return 'O campo "password" é obrigatório';
-//     if (password.length < 6) return 'O "password" deve ter pelo menos 6 caracteres';
-// }
+async function writeTalkersInfo() {
+  try {
+    const currentTalkers = await readTalkersInfo();
+    const newTalkerId = { id: currentTalkers.lenght + 1 };
+    const newTalkers = [...currentTalkers, newTalkerId];
+    await fs.writeFile(path.resolve(__dirname, '../talker.json'));
+    return newTalkers;
+  } catch (error) {
+    console.error(`Erro na escrita do arquivo: ${error}`);
+  }
+}
 
 module.exports = { 
 readTalkersInfo,
 randomToken,
-// validateEmail,
-// validatePassword, 
+writeTalkersInfo,
 };
