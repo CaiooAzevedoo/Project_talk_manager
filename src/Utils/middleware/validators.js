@@ -1,5 +1,7 @@
+const crypto = require('crypto');
 // const HTTP_OK_STATUS = 200;
 const BAD_REQUEST = 400;
+const UNAUTHORIZED = 401;
 // const NOT_FOUND = 404;
 // const INTERNAL_SERVER_ERROR = 500;
 // const PORT = '3000';
@@ -28,13 +30,29 @@ function validatePassword(password, res) {
        }
 }
 
+function randomToken() {
+    return crypto.randomBytes(8).toString('hex');
+}
+
 async function validateLogin(req, res, next) {
     const { email, password } = req.body;
     return validateEmail(email, res) || validatePassword(password, res)
     || next();
 }
 
-function validateName(name, res) {
+function validateToken(req, res, next) {
+    const { authorization } = req.headers;
+    if (!authorization) { 
+        return res.status(UNAUTHORIZED).json({ 
+            message: 'Token não encontrado' }); 
+        }
+    if (authorization.length !== 16) { 
+        return res.status(UNAUTHORIZED).json({ message: 'Token inválido' }); 
+    }
+   return next();
+   }
+   
+function validateName(name, res, next) {
     if (!name) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "name" é obrigatório',
@@ -45,9 +63,10 @@ function validateName(name, res) {
             message: 'O "name" deve ter pelo menos 3 caracteres',
         });
     }
+    return next();
 }
 
-function validateAge(age, res) {
+function validateAge(age, res, next) {
     if (!age) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "age" é obrigatório',
@@ -58,44 +77,53 @@ function validateAge(age, res) {
             message: 'A pessoa palestrante deve ser maior de idade',
         });
     }
+    return next();
 }
 
-function validadteWatchedAt(watchedAt, res) {
+function validadteTalk(talk, res, next) {
+    if (!talk) {
+        return res.status(BAD_REQUEST).json({
+            message: 'O campo "talk" é obrigatório',
+        });
+    }
+    return next();
+}
+
+function validadteWatchedAt(watchedAt, res, next) {
     if (!watchedAt) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "watchedAt" é obrigatório',
         });
     }
-    if (/(\d{4})[-./](\d{2})[-./](\d{2})/.test(watchedAt)) {
+    if (!/[0-3][0-9]\/[0-1][0-9]\/[0-9][0-9][0-9][0-9]/.test(watchedAt)) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
         });
     }
+    return next();
 }
 
-function validadteRate(rate, res) {
+function validadteRate(req, rate, res, next) {
     if (!rate) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "rate" é obrigatório',
         });
     }
-    if (rate < 1 || rate > 5) {
+    if (Number(rate) < 1 || Number(rate) > 5) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "rate" deve ser um inteiro de 1 à 5',
         });
     }
-}
-
-function validateTalker(talk, res, next) {
-    const { name, age, watchedAt, rate } = res.body;
-    return validateName(name, res) 
-    || validateAge(age, res) 
-    || validadteWatchedAt(watchedAt, res) 
-    || validadteRate(rate, res) 
-    || next();
+    return next();
 }
 
 module.exports = {
 validateLogin,
-validateTalker,
+validateName,
+validateAge,
+validadteTalk,
+validadteWatchedAt,
+validadteRate,
+randomToken,
+validateToken,
 };

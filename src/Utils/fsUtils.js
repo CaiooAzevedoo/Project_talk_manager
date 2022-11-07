@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const path = require('path');
-const crypto = require('crypto');
 
 async function readTalkersInfo() {
   try {
@@ -12,16 +11,12 @@ async function readTalkersInfo() {
   }
 }
 
-function randomToken() {
-    return crypto.randomBytes(8).toString('hex');
-}
-
-async function writeTalkersInfo() {
+async function writeTalkersInfo(newTalker) {
   try {
     const currentTalkers = await readTalkersInfo();
-    const newTalkerId = { id: currentTalkers.lenght + 1 };
+    const newTalkerId = { id: currentTalkers.lenght + 1, ...newTalker };
     const newTalkers = [...currentTalkers, newTalkerId];
-    await fs.writeFile(path.resolve(__dirname, '../talker.json'));
+    await fs.writeFile(path.resolve(__dirname, '../talker.json'), JSON.stringify(newTalkers));
     return newTalkers;
   } catch (error) {
     console.error(`Erro na escrita do arquivo: ${error}`);
@@ -30,6 +25,5 @@ async function writeTalkersInfo() {
 
 module.exports = { 
 readTalkersInfo,
-randomToken,
 writeTalkersInfo,
 };

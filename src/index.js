@@ -1,7 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkersInfo, randomToken, writeTalkersInfo } = require('./Utils/fsUtils');
-const { validateLogin, validateTalker } = require('./Utils/middleware/validators');
+const { readTalkersInfo, writeTalkersInfo } = require('./Utils/fsUtils');
+const { 
+  validateLogin, 
+  validateName,
+  validateAge,
+  validadteTalk,
+  validadteWatchedAt,
+  validadteRate,
+  randomToken, 
+  validateToken,
+   } = require('./Utils/middleware/validators');
 
 const app = express();
 app.use(bodyParser.json());
@@ -44,20 +53,15 @@ app.post('/login', validateLogin, (_req, res) => {
   return res.status(HTTP_OK_STATUS).json({ token });
 });
 
-app.post('/talker', validateTalker, async (req, res) => {
-  const { name, age, talk, watchedAt } = req.body;
-  const talkers = await readTalkersInfo();
-  const upId = talkers.sort((a, b) => b.id - a.id)[0].id;
-
-  const talker = {
-    id: upId + 1,
-    name,
-    age,
-    talk,
-    watchedAt,
-  };
-
-  writeTalkersInfo([...talker, talker]);
+app.post('/talker', 
+validateToken, 
+validateName, 
+validateAge,
+validadteTalk,
+validadteRate,
+validadteWatchedAt, async (req, res) => {
+  const newTalker = req.body;
+  const newTalkerId = await writeTalkersInfo(newTalker);
   
-  return res.status(CREATED).json(talker);
+  return res.status(CREATED).json(newTalkerId);
 });
