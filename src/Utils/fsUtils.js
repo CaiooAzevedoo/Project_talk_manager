@@ -14,7 +14,7 @@ async function readTalkersInfo() {
 async function writeTalkersInfo(newTalker) {
   try {
     const currentTalkers = await readTalkersInfo();
-    const newTalkerId = { id: currentTalkers.lenght + 1, ...newTalker };
+    const newTalkerId = { id: currentTalkers.length + 1, ...newTalker };
     const allTalkers = JSON.stringify([...currentTalkers, newTalkerId]);
     await fs.writeFile(path.resolve(__dirname, '../talker.json'), allTalkers);
     return newTalkerId;
