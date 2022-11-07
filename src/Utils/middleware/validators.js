@@ -114,7 +114,7 @@ function validadteRate(req, res, next) {
             message: 'O campo "rate" é obrigatório',
         });
     }
-    if (Number(talk.rate) < 1 || Number(talk.rate) > 5) {
+    if (Number(talk.rate) < 1 || Number(talk.rate) > 5 || parseInt(talk.rate, 10) !== talk.rate) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "rate" deve ser um inteiro de 1 à 5',
         });

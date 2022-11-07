@@ -15,9 +15,9 @@ async function writeTalkersInfo(newTalker) {
   try {
     const currentTalkers = await readTalkersInfo();
     const newTalkerId = { id: currentTalkers.lenght + 1, ...newTalker };
-    const newTalkers = [...currentTalkers, newTalkerId];
-    await fs.writeFile(path.resolve(__dirname, '../talker.json'), JSON.stringify(newTalkers));
-    return newTalkers;
+    const allTalkers = JSON.stringify([...currentTalkers, newTalkerId]);
+    await fs.writeFile(path.resolve(__dirname, '../talker.json'), allTalkers);
+    return newTalkerId;
   } catch (error) {
     console.error(`Erro na escrita do arquivo: ${error}`);
   }
@@ -25,5 +25,6 @@ async function writeTalkersInfo(newTalker) {
 
 module.exports = { 
 readTalkersInfo,
+
 writeTalkersInfo,
 };
