@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { readTalkersInfo, randomToken } = require('./Utils/fsUtils');
+const { validateLogin } = require('./Utils/middleware/validateLogin');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+// const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 // const INTERNAL_SERVER_ERROR = 500;
 const PORT = '3000';
@@ -37,8 +39,8 @@ app.get('/talker/:id', async (req, res) => {
     message: 'Pessoa palestrante não encontrada' });
 });
 
-app.post('/login', (_req, res) => {
+app.post('/login', validateLogin, (_req, res) => {
   const token = randomToken();
 
-  return res.status(200).json({ token });
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
