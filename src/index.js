@@ -44,7 +44,7 @@ app.get('/talker', async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-app.get('/talker/search', async (req, res) => {
+app.get('/talker/search', validateToken, async (req, res) => {
   const searchFilter = req.query.q;
   const searchResults = await searchTalkers(searchFilter);
 
