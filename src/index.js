@@ -5,11 +5,13 @@ const {
   validateLogin, 
   validateName,
   validateAge,
-  validadteTalk,
-  validadteWatchedAt,
-  validadteRate,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
   randomToken, 
   validateToken,
+  // validateRatePut,
+  // validateRatePut2, 
    } = require('./Utils/middleware/validators');
 
 const app = express();
@@ -57,9 +59,9 @@ app.post('/talker',
 validateToken, 
 validateName, 
 validateAge,
-validadteTalk,
-validadteRate,
-validadteWatchedAt, async (req, res) => {
+validateTalk,
+validateRate,
+validateWatchedAt, async (req, res) => {
   const newTalker = req.body;
   const newTalkerId = await writeTalkersInfo(newTalker);
   
@@ -70,9 +72,11 @@ app.put('/talker/:id',
 validateToken, 
 validateName, 
 validateAge,
-validadteTalk,
-validadteRate,
-validadteWatchedAt,
+validateTalk,
+validateRate,
+// validateRatePut2,
+// validateRatePut,
+validateWatchedAt,
 async (req, res) => {
   const { id } = req.params;
   const updatedTalkersInfo = req.body;

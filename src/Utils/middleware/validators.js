@@ -82,7 +82,7 @@ function validateAge(req, res, next) {
     return next();
 }
 
-function validadteTalk(req, res, next) {
+function validateTalk(req, res, next) {
     const { talk } = req.body;
     if (!talk) {
         return res.status(BAD_REQUEST).json({
@@ -92,7 +92,7 @@ function validadteTalk(req, res, next) {
     return next();
 }
 
-function validadteWatchedAt(req, res, next) {
+function validateWatchedAt(req, res, next) {
     const { talk } = req.body;
     if (!talk.watchedAt) {
         return res.status(BAD_REQUEST).json({
@@ -107,14 +107,14 @@ function validadteWatchedAt(req, res, next) {
     return next();
 }
 
-function validadteRate(req, res, next) {
+function validateRate(req, res, next) {
     const { talk } = req.body;
     if (!talk.rate) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "rate" é obrigatório',
         });
     }
-    if (Number(talk.rate) < 1 || Number(talk.rate) > 5 || parseInt(talk.rate, 10) !== talk.rate) {
+    if (Number(talk.rate) < 1 || Number(talk.rate) > 5 || parseInt(talk.rate, 10) !== (talk.rate)) {
         return res.status(BAD_REQUEST).json({
             message: 'O campo "rate" deve ser um inteiro de 1 à 5',
         });
@@ -122,13 +122,36 @@ function validadteRate(req, res, next) {
     return next();
 }
 
+// function validateRatePut(req, res, next) {
+//     const { talk } = req.body;
+//     if (!talk.rate) {
+//         return res.status(BAD_REQUEST).json({
+//             message: 'O campo "rate" é obrigatório',
+//         });
+//     }
+//     return next();
+// }
+
+// function validateRatePut2(req, res, next) {
+//     const { talk } = req.body;
+//     if (Number(talk.rate) < 1 || Number(talk.rate) > 5 || parseInt(talk.rate, 10) !== talk.rate) {
+//         return res.status(BAD_REQUEST).json({
+//             message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+//         });
+//     }
+//     return next();
+// }
+
 module.exports = {
 validateLogin,
 validateName,
 validateAge,
-validadteTalk,
-validadteWatchedAt,
-validadteRate,
+validateTalk,
+validateWatchedAt,
+validateRate,
 randomToken,
 validateToken,
+// validateRatePut,
+// validateRatePut2,
+
 };
