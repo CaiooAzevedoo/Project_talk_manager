@@ -4,7 +4,8 @@ const {
   readTalkersInfo, 
   writeTalkersInfo, 
   updateTalkersInfo, 
-  deleteTalker } = require('./Utils/fsUtils');
+  deleteTalker,
+  searchTalkers } = require('./Utils/fsUtils');
 const { 
   validateLogin, 
   validateName,
@@ -41,6 +42,13 @@ app.get('/talker', async (_req, res) => {
 
   if (talkers.length === 0) return res.status(HTTP_OK_STATUS).json([]);
   return res.status(HTTP_OK_STATUS).json(talkers);
+});
+
+app.get('/talker/search', async (req, res) => {
+  const searchFilter = req.query.q;
+  const searchResults = await searchTalkers(searchFilter);
+
+  return res.status(200).json(searchResults);
 });
 
 app.get('/talker/:id', async (req, res) => {

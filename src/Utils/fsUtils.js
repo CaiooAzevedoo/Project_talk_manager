@@ -52,9 +52,21 @@ async function deleteTalker(id) {
   }
 }
 
+async function searchTalkers(serchFilter) {
+  try {
+    const currentTalkers = await readTalkersInfo();
+    const results = currentTalkers.filter(({ name }) => 
+      name.includes(serchFilter));
+      return results;
+  } catch (error) {
+    console.error(`Erro na pesquisa: ${error}`);
+  }
+}
+
 module.exports = { 
 readTalkersInfo,
 writeTalkersInfo,
 updateTalkersInfo,
 deleteTalker,
+searchTalkers,
 };
