@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkersInfo, writeTalkersInfo } = require('./Utils/fsUtils');
+const { readTalkersInfo, writeTalkersInfo, updateTalkersInfo } = require('./Utils/fsUtils');
 const { 
   validateLogin, 
   validateName,
@@ -64,4 +64,20 @@ validadteWatchedAt, async (req, res) => {
   const newTalkerId = await writeTalkersInfo(newTalker);
   
   return res.status(CREATED).json(newTalkerId);
+});
+
+app.put('/talker/:id', 
+validateToken, 
+validateName, 
+validateAge,
+validadteTalk,
+validadteRate,
+validadteWatchedAt,
+async (req, res) => {
+  const { id } = req.params;
+  const updatedTalkersInfo = req.body;
+
+  const updateTalker = await updateTalkersInfo(Number(id), updatedTalkersInfo);
+  
+  return res.status(HTTP_OK_STATUS).json(updateTalker);
 });

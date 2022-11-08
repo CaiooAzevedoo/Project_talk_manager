@@ -23,8 +23,26 @@ async function writeTalkersInfo(newTalker) {
   }
 }
 
+async function updateTalkersInfo(id, updatedTalkersInfo) {
+  const currentTalkers = await readTalkersInfo();
+  const updateTalker = { id, ...updatedTalkersInfo };
+  const updatedTalkers = currentTalkers.reduce((talkersList, currentTalker) => {
+    if (currentTalker.id === updateTalker.id) { 
+      return [...talkersList, updateTalker];
+    } return [...talkersList, currentTalker];
+  }, []);
+
+  const updatedInfo = JSON.stringify(updatedTalkers);
+  try { 
+    await fs.writeFile(path.resolve(__dirname, '../talker.json'), updatedInfo);
+    return updateTalker;
+  } catch (error) {
+    console.error(`Erro na escrita do arquivo: ${error}`);
+  }
+}
+
 module.exports = { 
 readTalkersInfo,
-
 writeTalkersInfo,
+updateTalkersInfo,
 };
