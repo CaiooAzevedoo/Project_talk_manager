@@ -96,6 +96,5 @@ validateToken,
 async (req, res) => {
   const { id } = req.params;
   await deleteTalker(Number(id));
-  
-  return res.status(NO_CONTENT);
+  return res.status(NO_CONTENT).end();
 });

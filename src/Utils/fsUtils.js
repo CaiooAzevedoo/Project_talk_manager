@@ -42,11 +42,11 @@ async function updateTalkersInfo(id, updatedTalkersInfo) {
 }
 async function deleteTalker(id) {
   const currentTalkers = await readTalkersInfo();
-  const updateTalker = currentTalkers.filter((ctalker) => ctalker.id !== id);
-  const updatedInfo = JSON.stringify(updateTalker);
+  const updatedTalkers = currentTalkers.filter((ctalker) => ctalker.id !== id);
+  const updatedInfo = JSON.stringify(updatedTalkers);
   try { 
     await fs.writeFile(path.resolve(__dirname, '../talker.json'), updatedInfo);
-    return updateTalker;
+    return updatedTalkers;
   } catch (error) {
     console.error(`Erro na escrita do arquivo: ${error}`);
   }
