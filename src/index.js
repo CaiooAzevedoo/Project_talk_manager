@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkersInfo, writeTalkersInfo, updateTalkersInfo } = require('./Utils/fsUtils');
+const { 
+  readTalkersInfo, 
+  writeTalkersInfo, 
+  updateTalkersInfo, 
+  deleteTalker } = require('./Utils/fsUtils');
 const { 
   validateLogin, 
   validateName,
@@ -11,7 +15,7 @@ const {
   randomToken, 
   validateToken,
   // validateRatePut,
-  // validateRatePut2, 
+  // validateRatePut2,
    } = require('./Utils/middleware/validators');
 
 const app = express();
@@ -19,6 +23,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const CREATED = 201;
+const NO_CONTENT = 204;
 const NOT_FOUND = 404;
 const PORT = '3000';
 
@@ -31,7 +36,7 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-app.get('/talker', async (req, res) => {
+app.get('/talker', async (_req, res) => {
   const talkers = await readTalkersInfo();
 
   if (talkers.length === 0) return res.status(HTTP_OK_STATUS).json([]);
@@ -84,4 +89,13 @@ async (req, res) => {
   const updateTalker = await updateTalkersInfo(Number(id), updatedTalkersInfo);
   
   return res.status(HTTP_OK_STATUS).json(updateTalker);
+});
+
+app.delete('/talker/:id', 
+validateToken,
+async (req, res) => {
+  const { id } = req.params;
+  await deleteTalker(Number(id));
+  
+  return res.status(NO_CONTENT);
 });
