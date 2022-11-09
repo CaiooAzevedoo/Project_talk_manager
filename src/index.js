@@ -15,8 +15,6 @@ const {
   validateRate,
   randomToken, 
   validateToken,
-  // validateRatePut,
-  // validateRatePut2,
    } = require('./Utils/middleware/validators');
 
 const app = express();
@@ -87,8 +85,6 @@ validateName,
 validateAge,
 validateTalk,
 validateRate,
-// validateRatePut2,
-// validateRatePut,
 validateWatchedAt,
 async (req, res) => {
   const { id } = req.params;
